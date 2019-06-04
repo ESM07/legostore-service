@@ -34,4 +34,5 @@ public interface LegoSetRepository extends MongoRepository<LegoSet, String>, Que
 
     List<LegoSet> findAllBy(TextCriteria textCriteria);
 
+//    List<LegoSet> getByPaymentOption(String id);
 }

@@ -32,7 +32,7 @@ public class LegoSet {
     private DeliveryInfo deliveryInfo;
     @Transient
     private int numParts;
-
+    @DBRef
     private PaymentOptions paymentOptions;
 
     public LegoSet(String name, LegoSetDifficulty legoSetDifficulty, String theme, Collection<ProductReview> reviews, DeliveryInfo deliveryInfo, PaymentOptions paymentOptions) {

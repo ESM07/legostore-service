@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -16,7 +17,9 @@ import java.util.Arrays;
 @SpringBootApplication
 public class LegostoreApplication implements CommandLineRunner{
     @Autowired
-    LegoSetRepository legoSetRepository;
+    private LegoSetRepository legoSetRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Bean
     public LegoSetRepositoryCustomImpl legoSetRepositoryCustom() {
@@ -36,6 +39,9 @@ public class LegostoreApplication implements CommandLineRunner{
         PaymentOptions creditCardPayment = new PaymentOptions(PaymentType.CreditCard, 0);
         PaymentOptions payPalPayment = new PaymentOptions(PaymentType.PayPal, 1);
         PaymentOptions cashPayment = new PaymentOptions(PaymentType.Cash, 10);
+        mongoTemplate.insert(creditCardPayment);
+        mongoTemplate.insert(payPalPayment);
+        mongoTemplate.insert(cashPayment);
 
         LegoSet milleniumFalcon = new LegoSet("Millennium Falcon", LegoSetDifficulty.HARD, "Star Wars",
                 Arrays.asList(

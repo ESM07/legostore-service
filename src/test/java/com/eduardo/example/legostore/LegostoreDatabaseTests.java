@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class LegostoreDatabaseTests {
     @Autowired
     private LegoSetRepository legoSetRepository;
 
+    List<LegoSet> legoSets;
 
     @Before
     public void before() {
@@ -37,7 +39,9 @@ public class LegostoreDatabaseTests {
         PaymentOptions creditCardPayment = new PaymentOptions(PaymentType.CreditCard, 0);
         PaymentOptions payPalPayment = new PaymentOptions(PaymentType.PayPal, 1);
         PaymentOptions cashPayment = new PaymentOptions(PaymentType.Cash, 10);
-
+        mongoTemplate.insert(creditCardPayment);
+        mongoTemplate.insert(payPalPayment);
+        mongoTemplate.insert(cashPayment);
         LegoSet milleniumFalcon = new LegoSet("Millennium Falcon", LegoSetDifficulty.HARD, "Star Wars",
                 Arrays.asList(
                         new ProductReview("Dan", 7),
@@ -55,11 +59,12 @@ public class LegostoreDatabaseTests {
 
         legoSetRepository.insert(milleniumFalcon);
         legoSetRepository.insert(skyPolice);
+        legoSets = new ArrayList<>();
+
     }
 
     @Test
     public void findAllWhereReviewRatingEqualsTest() {
-        List<LegoSet> legoSets;
         legoSets = legoSetRepository.findAllWhereReviewRatingEquals(10);
         assertEquals("Name doesn't match", "Millennium Falcon", legoSets.get(0).getName());
         assertEquals(1, legoSets.size());
@@ -68,11 +73,15 @@ public class LegostoreDatabaseTests {
 
     @Test
     public void findAllProductsInStockTest() {
-        List<LegoSet> legoSets;
         legoSets = legoSetRepository.findAllProductsInStock();
         assertEquals(1, legoSets.size());
         assertTrue(legoSets.get(0).getDeliveryInfo().isInStock());
     }
+
+//    @Test
+//    void testGetByPaymentOption() {
+//
+//    }
 
 
 }
